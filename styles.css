@@ -393,6 +393,11 @@ body {
 }
 
 @media screen and (orientation: landscape) and (max-width: 950px) {
+    #ui-layout {
+        overflow-x: scroll;
+        height: 100%;
+    }
+
     .ui-rates-container {
         width: max-content;
         height: 100%;
