@@ -5,6 +5,28 @@
     font-style: normal;
 }
 
+@keyframes fadeIn-top {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn-bottom {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 :root {
     --ui-blue: rgb(60, 204, 239);
     --ui-red: rgb(238, 41, 85);
@@ -256,6 +278,14 @@ body {
 
     padding: 0 0rem;
     box-sizing: border-box;
+}
+
+.review-top.fade-in {
+    animation: fadeIn-top 0.5s forwards;
+}
+
+.review-bottom.fade-in {
+    animation: fadeIn-bottom 0.5s forwards;
 }
 
 .review-top {

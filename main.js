@@ -27,6 +27,8 @@ class WebHandle {
     bottomStars;
     topReview;
     bottomReview;
+    topAnim;
+    bottomAnim;
     constructor() {
         window.handle = this;
         this.topStars = document.querySelector(".review-background.review-top .review-stars");
@@ -67,52 +69,59 @@ class WebHandle {
                 if (this.currentSelected != undefined) {
                     var data = getRate(this.currentSelected.dataset["name"]);
                     if (data != undefined) {
-                        var rows = data.ratings[0]?.review.split("\n");
-                        this.topReview.replaceChildren();
-                        for (var i = 0; i < rows.length; i++) {
-                            if (i > 0) {
-                                this.topReview.appendChild(document.createElement("br"));
+                        const updateReview = (rating, review, stars) => {
+                            var rows = rating.review.split("\n");
+                            review.replaceChildren();
+                            for (var i = 0; i < rows.length; i++) {
+                                if (i > 0) {
+                                    review.appendChild(document.createElement("br"));
+                                }
+                                var sp = document.createElement("span");
+                                sp.textContent = rows[i];
+                                review.appendChild(sp);
                             }
-                            var sp = document.createElement("span");
-                            sp.textContent = rows[i];
-                            this.topReview.appendChild(sp);
-                        }
-                        this.topStars.replaceChildren();
-                        var a = data.ratings[0]?.rate / 2;
-                        var b = Math.ceil(a);
-                        var c = !Number.isInteger(a);
-                        var star;
-                        for (var i = 0; i < b; i++) {
-                            star = document.createElement('span');
-                            star.textContent = "★";
-                            this.topStars.appendChild(star);
-                        }
-                        if (c && star) {
-                            star.classList.add("half");
-                        }
-                        var rows = data.ratings[1]?.review.split("\n");
-                        this.bottomReview.replaceChildren();
-                        for (var i = 0; i < rows.length; i++) {
-                            if (i > 0) {
-                                this.bottomReview.appendChild(document.createElement("br"));
+                            stars.replaceChildren();
+                            var a = rating.rate / 2;
+                            var b = Math.ceil(a);
+                            var c = !Number.isInteger(a);
+                            var star;
+                            for (var i = 0; i < b; i++) {
+                                star = document.createElement('span');
+                                star.textContent = "★";
+                                stars.appendChild(star);
                             }
-                            var sp = document.createElement("span");
-                            sp.textContent = rows[i];
-                            this.bottomReview.appendChild(sp);
-                        }
-                        this.bottomStars.replaceChildren();
-                        var a = data.ratings[1]?.rate / 2;
-                        var b = Math.ceil(a);
-                        var c = !Number.isInteger(a);
-                        var star;
-                        for (var i = 0; i < b; i++) {
-                            star = document.createElement('span');
-                            star.textContent = "★";
-                            this.bottomStars.appendChild(star);
-                        }
-                        if (c && star) {
-                            star.classList.add("half");
-                        }
+                            if (c && star) {
+                                star.classList.add("half");
+                            }
+                        };
+                        updateReview(data.ratings[0], this.topReview, this.topStars);
+                        updateReview(data.ratings[1], this.bottomReview, this.bottomStars);
+                        if (this.topAnim != undefined)
+                            this.topAnim.cancel();
+                        if (this.bottomAnim != undefined)
+                            this.bottomAnim.cancel();
+                        var topParent = this.topReview.parentElement;
+                        this.topAnim = topParent.animate([
+                            // Keyframes
+                            { opacity: 0, transform: 'translateX(-20px)' },
+                            { opacity: 1, transform: 'translateX(0)' }
+                        ], {
+                            // Timing options
+                            duration: 500,
+                            easing: 'ease-out',
+                            fill: 'forwards'
+                        });
+                        var bottomParent = this.bottomReview.parentElement;
+                        this.bottomAnim = bottomParent.animate([
+                            // Keyframes
+                            { opacity: 0, transform: 'translateX(-20px)' },
+                            { opacity: 1, transform: 'translateX(0)' }
+                        ], {
+                            // Timing options
+                            duration: 500,
+                            easing: 'ease-out',
+                            fill: 'forwards'
+                        });
                     }
                     // this.currentSelected.style.zIndex = (++this.highestZIndex).toString();
                 }
